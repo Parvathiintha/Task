@@ -39,7 +39,9 @@
     updatedBy:
     {
         type: mongoose.Schema.Types.ObjectId, ref: 'User' 
-    }
+    },
+    dueDate: Date,
+    isDeleted: { type: Boolean, default: false}
     },
     { timestamps: true });
 
