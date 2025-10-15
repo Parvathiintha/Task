@@ -32,21 +32,25 @@ exports.getUsers = async(req,res)=>{
 }
 
 
-exports.deleteUser = async(req,res)=>{
+exports.deleteUser = async (req, res) => {
   try {
-      const {id} = req.params;
-      const user = await User.findById(id);
-      if(!user){
-        return res.status(404).json({message : "User Not Found"});
-      }
-      
-     user.isDeleted =  true;
-     await user.save();
+    const { id } = req.params;
+    console.log(" ID received:", id);
 
-      res.status(200).json({message : "User Deleted Successfully"})
+    const user = await User.findById(id);
+    console.log(" User found:", user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+
+    user.isDeleted = true;
+    await user.save();
+
+    res.status(200).json({ message: "User Deleted Successfully" });
   } catch (error) {
-    console.log(error);
-    
-    res.status(500).json({message : "Internal Server Error "})
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};
+
