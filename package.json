@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "nodemon task.js",
     "start": "node task.js"
- 
   },
   "keywords": [],
   "author": "",
@@ -19,5 +18,14 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
     "nodemon": "^3.1.10"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Parvathiintha/Task.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Parvathiintha/Task/issues"
+  },
+  "homepage": "https://github.com/Parvathiintha/Task#readme"
 }

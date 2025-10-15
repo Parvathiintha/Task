@@ -1,44 +1,23 @@
 const jwt = require('jsonwebtoken');
 const User = require('../Models/UserModel');
 
-exports.authenticate = async (req, res, next) => {
-  try {
-    // Get token from Authorization header
-    const authHeader = req.header('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer '))
-      return res.status(401).json({ success: false, message: 'No token provided' });
-
-    const token = authHeader.split(' ')[1]; 
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Find user in DB
-    const user = await User.findById(decoded.id);
-    if (!user || !user.isActive)
-      return res.status(401).json({ success: false, message: 'User not found or inactive' });
-
-    // Attach user to request
-    req.user = user;
-    next();
-  } catch (error) {
-    // JWT errors
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ success: false, message: 'Invalid token' });
-    }
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ success: false, message: 'Token expired' });
+exports.authenticateToken = (req,res,next)=>{
+    const token = req.headers.authorization?.split(" ")[1];
+    
+    if(!token){
+        return res.status(401).json({message : "No Token , Unauthorized"});
     }
 
-    // Other server errors
-    res.status(500).json({
-      success: false,
-      message: 'Server error during authentication',
-      error: error.message,
-    });
-  }
-};
-
+    try{
+        const decode = jwt.verify(token , process.env.JWT_SECRET);
+        req.user = decode;
+        next();
+    }
+    catch(err){
+        res.status(403).json({message : "Invalid or Expired Token"})
+    }
+}
+ 
 //Authorization middleware
 exports.authorize = (...roles) => {
   return (req, res, next) => {
